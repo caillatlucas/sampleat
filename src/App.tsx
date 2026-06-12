@@ -40,7 +40,7 @@ function App() {
          {/* HEADER (Logo, Title, Master Controls) */}
          <header className="w-full flex items-center justify-between bg-retro-panel p-4 shadow-retro-outset border-2 border-retro-border-dark">
             <div className="flex items-center gap-3">
-               <img src="/apple-logo.png" alt="Logo" className="w-12 h-12 object-contain drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" />
+               <img src={`${import.meta.env.BASE_URL}apple-logo.png`} alt="Logo" className="w-12 h-12 object-contain drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" />
                <h1 className="text-4xl font-black tracking-tighter text-retro-text" style={{ textShadow: '2px 2px 0 #a3a098' }}>SAMPLEAT</h1>
                <div className="flex flex-col justify-end h-full pb-1 ml-2">
                  <span className="text-[10px] font-bold font-mono tracking-widest text-retro-text">2026 by IG:lc.20ytb</span>
