@@ -1,0 +1,55 @@
+name: Deploy static content to Pages
+
+on:
+  # Se déclenche lors de push sur la branche principale
+  push:
+    branches: ['main'] # ou 'master' selon votre branche principale
+
+  # Permet d'exécuter ce workflow manuellement depuis l'onglet Actions
+  workflow_dispatch:
+
+# Permet au job d'obtenir les permissions nécessaires pour déployer sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permet de s'assurer qu'un seul déploiement est en cours à la fois
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # Job de compilation (Build)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Le dossier généré par Vite (souvent "dist")
+          path: './dist'
+
+  # Job de déploiement (Deploy)
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
